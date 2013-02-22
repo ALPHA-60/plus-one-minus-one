@@ -95,7 +95,7 @@ int pan_portaudio_callback(const void* inputBuffer,
 	    area.head         = 0;
 	    area.frame_number = framesPerBuffer;
 
-	    printf("delta_gt:%10.3f\tdelta_pa:%10.3f\n", t - self->start_ms, t_pa - self->start_ms_pa);
+	    printf("delta_gt:%10.3f\tdelta_pa:%10.3f\tt_pa:%10.3f\n", t - self->start_ms, t_pa - self->start_ms_pa, t_pa);
 	    e->computes(e, &area, t - self->start_ms);
 	}
     } else {
@@ -179,6 +179,7 @@ PaTime streamtime(pan_portaudio_driver_t* self)
     printf("ms:%10.3f\tms_pa:%10.3f\n", (get_milliseconds() - self->start_ms) / 1000.00, Pa_GetStreamTime(self->stream));
     return get_milliseconds() / 1000.00;
 #else
+    PaTime time = Pa_GetStreamTime(self->stream); //self->frame_number * self->buffer_number;
     return time < 0.0 ? 0.0 : time;
 #endif
 }
